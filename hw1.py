@@ -1,6 +1,5 @@
 import cvxpy as cp
 import numpy as np
-import time
 import random
 
 # ==================== Helper Functions ====================
@@ -69,6 +68,8 @@ def solve_max_flow(s, L, c):
     maxFlow = round(problem.value) # Optimal value (max flow)
     maxFlowEdges = np.around(f.value) # Optimal flow on each edge
 
+    return maxFlow, maxFlowEdges
+
 
 # ==================== Problem 1.a ====================
 
@@ -94,62 +95,13 @@ target = 9  # 'I'
 L = computeL(A, source, target)
 
 # CVXPY Max Flow Problem Formulation as linear program
-
 maxFlow, maxFlowEdges = solve_max_flow(s, L, c)
 
 # Printing the results
-# print("Optimal value (max flow):", maxFlow)
-# print("Optimal flow on each edge:", maxFlowEdges)
+print("Optimal value (max flow):", maxFlow)
+print("Optimal flow on each edge:", maxFlowEdges)
 
 
 
 # ==================== Problem 1.b ====================
 
-
-
-
-
-'''
-def solve_max_flow(s, t, weights, source=1, target=None):
-    """Solve the max flow problem for the given graph."""
-    if not target:
-        target = max(s + t)
-    
-    # Compute the node-edge incidence matrix
-    nodes = list(range(1, len(weights) + 1))
-    A_full = incidence_matrix(s, t, nodes)
-    A_modified = np.delete(A_full, [source-1, target-1], 0)
-    
-    # CVXPY formulation for the max flow problem
-    f = cp.Variable(len(weights))
-    s_vector = np.zeros(len(weights))
-    for i in range(len(s)):
-        if s[i] == source:
-            s_vector[i] = 1
-
-    objective = cp.Maximize(s_vector.T @ f)
-    constraints = [A_modified @ f == 0, 0 <= f, f <= weights]
-    prob = cp.Problem(objective, constraints)
-    prob.solve()
-    
-    return prob.value
-
-# Main loop to investigate the graph size limit
-n_nodes = 3
-max_time = 30  # Maximum acceptable time in seconds
-times = []
-
-while True:
-    s, t, weights = generate_all_connected_graph(n_nodes)
-    start_time = time.time()
-    solve_max_flow(s, t, weights)
-    elapsed_time = time.time() - start_time
-    
-    times.append(elapsed_time)
-    
-    if elapsed_time > max_time:
-        break
-    n_nodes += 1
-
-print(n_nodes, times)
-'''
