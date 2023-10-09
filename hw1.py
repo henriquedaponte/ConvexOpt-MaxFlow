@@ -60,32 +60,6 @@ print("Optimal flow on each edge:", np.around(f.value))
 
 
 '''
-# CVXPY Max Flow Problem Formulation
-
-# Defining the optimization variable
-f = cp.Variable(len(weights))
-
-# Creating the s_vector
-s_vector = np.zeros(len(weights))
-for i in range(len(s)):
-    if s[i] == source:
-        s_vector[i] = 1
-
-# Defining the objective
-objective = cp.Maximize(s_vector.T @ f)
-
-# Defining the constraints
-constraints = [A_modified @ f == 0, 0 <= f, f <= weights]
-
-# Defining the problem
-prob = cp.Problem(objective, constraints)
-
-# Solving the problem
-prob.solve()
-
-# Printing the results
-print("Optimal value (max flow):", prob.value)
-print("Optimal flow on each edge:", f.value)
 
 # ==================== Problem 1.b ====================
 
