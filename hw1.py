@@ -74,34 +74,65 @@ def solve_max_flow(s, L, c):
 # ==================== Problem 1.a ====================
 
 # Defining the graph (used the same graph outlined in the homework)
-h = [1, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 7, 8, 9] # head nodes
-t = [2, 4, 8, 3, 7, 4, 6, 5, 6, 8, 7, 8, 9, 3] # tail nodes
-c = [10, 10, 1, 10, 1, 10, 1, 1, 12, 12, 12, 12, 6, 4] # column vector of edge capacities.
-s = computeS(h, c) # column vector with a 1 for every edge leaving the source and a 0 for every other edge
-names = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'] # names of the nodes
-
-print(s)
+h1 = [1, 1, 1, 2, 2, 3, 3, 4, 5, 5, 6, 7, 8, 9] # head nodes
+t1 = [2, 4, 8, 3, 7, 4, 6, 5, 6, 8, 7, 8, 9, 3] # tail nodes
+c1 = [10, 10, 1, 10, 1, 10, 1, 1, 12, 12, 12, 12, 6, 4] # column vector of edge capacities.
+s1 = computeS(h1, c1) # column vector with a 1 for every edge leaving the source and a 0 for every other edge
 
 # Computing the node-edge incidence matrix for the graph
-nodes = list(range(1, len(names) + 1))
-A = incidence_matrix(h, t, nodes)
-
-
-# Defining the source and destination nodes
-source = 1  # 'A'
-target = 9  # 'I'
+nodes1 = list(range(1, max(t1) + 1))
+A1 = incidence_matrix(h1, t1, nodes1)
 
 # Computing L by removing rows corresponding to source and destination
-L = computeL(A, source, target)
+L1 = computeL(A1, 1, max(t1))
 
 # CVXPY Max Flow Problem Formulation as linear program
-maxFlow, maxFlowEdges = solve_max_flow(s, L, c)
+maxFlow1, maxFlowEdges1 = solve_max_flow(s1, L1, c1)
 
 # Printing the results
-print("Optimal value (max flow):", maxFlow)
-print("Optimal flow on each edge:", maxFlowEdges)
-
+print("Optimal value (max flow):", maxFlow1)
+print("Optimal flow on each edge:", maxFlowEdges1)
 
 
 # ==================== Problem 1.b ====================
+import time
 
+timeElapsed = 0
+
+# Starting number of nodes
+n = 5
+
+while timeElapsed < 1:
+
+    n += 5 # Incrementing number of nodes by 2
+    
+    # Generating all connected graphs with n nodes
+    h2, t2, c2 = generate_all_connected_graph(n)
+
+    # Defining vector containing the number of all nodes
+    nodes2 = list(range(1, n + 1))
+
+    # Computing incidence matrix
+    A2 = incidence_matrix(h2, t2, nodes2)
+
+    # Computing L
+    L2 = computeL(A2, 1, n)
+
+    # computing s
+    s2 = computeS(h2, c2)
+
+    start = time.time() # Starting timer
+
+    # Solving the max flow problem
+    maxFlow2, maxFlowEdges2 = solve_max_flow(s2, L2, c2)
+
+    end = time.time() # Ending timer
+
+    timeElapsed = end - start # Computing time elapsed
+
+    print("Graph with", n, "nodes took", timeElapsed, "seconds to solve")
+
+
+print("Number of nodes in graph that took ", timeElapsed," seconds to solve:", n)
+print("Optimal value (max flow):", maxFlow2)
+print("Optimal flow on each edge:", maxFlowEdges2)
